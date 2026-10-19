@@ -41,7 +41,7 @@ ThemeData buildLightTheme() {
       elevation: 0,
       scrolledUnderElevation: 2,
     ),
-    cardTheme: CardThemeData(
+    cardTheme: CardTheme(
       elevation: 0,
       color: scheme.surfaceContainerHighest.withOpacity(0.5),
       surfaceTintColor: Colors.transparent,
@@ -144,7 +144,7 @@ ThemeData buildDarkTheme() {
       elevation: 0,
       scrolledUnderElevation: 2,
     ),
-    cardTheme: CardThemeData(
+    cardTheme: CardTheme(
       elevation: 0,
       color: scheme.surfaceContainerHighest.withOpacity(0.5),
       surfaceTintColor: Colors.transparent,

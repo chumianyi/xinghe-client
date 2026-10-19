@@ -106,9 +106,10 @@ class _ProfilePageState extends State<ProfilePage> {
     final name = '${_me?['name'] ?? '星河用户'}';
     final email = '${_me?['email'] ?? ''}';
     final bio = '${_me?['bio'] ?? ''}';
-    final coins = (_me?['coins'] ?? 0) is int
-        ? _me?['coins'] as int
-        : int.tryParse('${_me?['coins']}') ?? 0;
+    final rawCoins = _me?['coins'];
+    final int coins = rawCoins is int
+        ? rawCoins
+        : int.tryParse('$rawCoins') ?? 0;
     return Scaffold(
       appBar: AppBar(
         title: const Text('我的'),

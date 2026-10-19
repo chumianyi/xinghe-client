@@ -121,7 +121,7 @@ class _SubmitPageState extends State<SubmitPage> {
           ]),
           const SizedBox(height: 12),
           DropdownButtonFormField<String>(
-            initialValue: _category,
+            value: _category,
             decoration: const InputDecoration(
                 labelText: '分类', prefixIcon: Icon(Icons.category_outlined)),
             items: _categories
