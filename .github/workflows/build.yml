@@ -32,13 +32,15 @@ jobs:
 
       - name: Set minSdk 22
         run: |
-          BUILD=android/app/build.gradle
-          if grep -q "minSdkVersion" "$BUILD"; then
-            sed -i 's/minSdkVersion [^ ]*/minSdkVersion 22/' "$BUILD"
+          BUILD=android/app/build.gradle.kts
+          [ -f "$BUILD" ] || BUILD=android/app/build.gradle
+          echo "Patching $BUILD"
+          if grep -q "minSdk" "$BUILD"; then
+            sed -i -E 's/minSdk(Version)?[ =]+[0-9A-Za-z._]+/minSdk = 22/' "$BUILD"
           else
-            sed -i '/defaultConfig {/a\        minSdkVersion 22' "$BUILD"
+            sed -i '/defaultConfig {/a\        minSdk = 22' "$BUILD"
           fi
-          grep -n "minSdkVersion" "$BUILD"
+          grep -n "minSdk" "$BUILD"
 
       - name: Install dependencies
         run: flutter pub get
