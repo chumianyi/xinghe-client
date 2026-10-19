@@ -15,7 +15,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.24.0
+          flutter-version: 3.32.0
           channel: stable
 
       - name: Run flutter create
@@ -39,14 +39,6 @@ jobs:
             sed -i '/defaultConfig {/a\        minSdkVersion 22' "$BUILD"
           fi
           grep -n "minSdkVersion" "$BUILD"
-
-      - name: Upgrade Kotlin version
-        run: |
-          SETTINGS=android/settings.gradle
-          # Force Kotlin 1.9.22 in plugins block
-          sed -i -E 's/(kotlin-android" version ")[^"]*/\11.9.22/' "$SETTINGS"
-          grep -n "kotlin" "$SETTINGS" || true
-          cat "$SETTINGS"
 
       - name: Install dependencies
         run: flutter pub get
