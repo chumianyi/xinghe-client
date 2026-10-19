@@ -1,0 +1,57 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.24.0
+          channel: stable
+
+      - name: Run flutter create
+        run: |
+          flutter create . --project-name xinghe --org com.chumian --platforms=android
+
+      - name: Restore project files
+        run: |
+          git checkout -- lib/ pubspec.yaml assets/
+
+      - name: Overwrite Android Manifest
+        run: |
+          cp ci/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
+
+      - name: Set minSdk 22
+        run: |
+          BUILD=android/app/build.gradle
+          if grep -q "minSdkVersion" "$BUILD"; then
+            sed -i 's/minSdkVersion [^ ]*/minSdkVersion 22/' "$BUILD"
+          else
+            sed -i '/defaultConfig {/a\        minSdkVersion 22' "$BUILD"
+          fi
+          grep -n "minSdkVersion" "$BUILD"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate launcher icons
+        run: dart run flutter_launcher_icons
+
+      - name: Build release APK
+        run: flutter build apk --release --no-tree-shake-icons
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: xinghe-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
